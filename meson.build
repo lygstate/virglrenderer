@@ -186,8 +186,7 @@ endif
 
 if with_egl
    if cc.has_header('epoxy/egl.h', dependencies: epoxy_dep) and epoxy_dep.get_pkgconfig_variable('epoxy_has_egl') == '1'
-      have_egl = true
-      conf_data.set('HAVE_EPOXY_EGL_H', 1)
+      have_egl = false
    else
       assert(not require_egl,
              'egl was explicitely requested but it is not supported by epoxy')
