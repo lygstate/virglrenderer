@@ -55,17 +55,23 @@ int vrend_winsys_init(uint32_t flags, int preferred_fd)
        * If the user specifies a preferred DRM fd and we can't use it, fail. If the user doesn't
        * specify an fd, it's possible to initialize EGL without one.
        */
+#if defined(HAVE_GBM)
       gbm = virgl_gbm_init(preferred_fd);
       if (preferred_fd > 0 && !gbm)
          return -1;
+#else
+      (void)preferred_fd;
+#endif
 
       egl = virgl_egl_init(gbm, flags & VIRGL_RENDERER_USE_SURFACELESS,
                            flags & VIRGL_RENDERER_USE_GLES);
       if (!egl) {
+#if defined(HAVE_GBM)
          if (gbm) {
             virgl_gbm_fini(gbm);
             gbm = NULL;
          }
+#endif
 
          return -1;
       }
@@ -98,10 +104,12 @@ void vrend_winsys_cleanup(void)
       virgl_egl_destroy(egl);
       egl = NULL;
       use_context = CONTEXT_NONE;
+#if defined(HAVE_GBM)
       if (gbm) {
          virgl_gbm_fini(gbm);
          gbm = NULL;
       }
+#endif
    }
 #endif
 #ifdef HAVE_EPOXY_GLX_H
@@ -182,7 +190,7 @@ int vrend_winsys_get_fourcc_for_texture(uint32_t tex_id, uint32_t format, int *f
 
 int vrend_winsys_get_fd_for_texture(uint32_t tex_id, int *fd)
 {
-#ifdef HAVE_EPOXY_EGL_H
+#if defined(HAVE_EPOXY_EGL_H) && defined(HAVE_GBM)
    if (!egl)
       return -1;
 

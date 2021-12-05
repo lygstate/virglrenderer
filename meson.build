@@ -180,10 +180,14 @@ else
    _gbm_ver = '0.0.0'
 endif
 
+gbm_dep = dependency('gbm', version: '>= ' + _gbm_ver, required: false)
+if gbm_dep.found()
+   conf_data.set('HAVE_GBM', 1)
+endif
+
 if with_egl
    if cc.has_header('epoxy/egl.h', dependencies: epoxy_dep) and epoxy_dep.get_pkgconfig_variable('epoxy_has_egl') == '1'
-      gbm_dep = dependency('gbm', version: '>= ' + _gbm_ver, required: require_egl)
-      have_egl = gbm_dep.found()
+      have_egl = true
       conf_data.set('HAVE_EPOXY_EGL_H', 1)
    else
       assert(not require_egl,

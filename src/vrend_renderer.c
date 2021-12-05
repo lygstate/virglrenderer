@@ -10970,6 +10970,7 @@ vrend_renderer_pipe_resource_set_type(struct vrend_context *ctx,
    /* resource is still untyped */
    if (!res->pipe_resource) {
 #ifdef HAVE_EPOXY_EGL_H
+#if defined(HAVE_GBM)
       const struct vrend_renderer_resource_create_args create_args = {
          .target = PIPE_TEXTURE_2D,
          .format = args->format,
@@ -11035,6 +11036,11 @@ vrend_renderer_pipe_resource_set_type(struct vrend_context *ctx,
       res->fd = -1;
       res->fd_type = VIRGL_RESOURCE_FD_INVALID;
       res->pipe_resource = &gr->base;
+#else /* HAVE_GBM */
+      (void)args;
+      vrend_printf("%s: EGL wihtout GBM are not support \n", __func__);
+      return EINVAL;
+#endif /* HAVE_GBM */
 #else /* HAVE_EPOXY_EGL_H */
       (void)args;
       vrend_printf("%s: no EGL support \n", __func__);

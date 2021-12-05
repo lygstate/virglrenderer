@@ -32,7 +32,6 @@
 #include "vrend_debug.h"
 #include "vrend_tweaks.h"
 #include "vrend_iov.h"
-#include "vrend_winsys_gbm.h"
 #include "virgl_hw.h"
 #include <epoxy/gl.h>
 
@@ -48,6 +47,8 @@ struct virgl_gl_ctx_param {
 struct virgl_context;
 struct virgl_resource;
 struct vrend_context;
+
+#define VIRGL_GBM_MAX_PLANES 4
 
 /* Number of mipmap levels for which to keep the backing iov offsets.
  * Value mirrored from mesa/virgl

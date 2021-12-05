@@ -29,12 +29,6 @@
 #include "vrend_iov.h"
 #include "virglrenderer.h"
 
-#ifdef GBM_MAX_PLANES
-#define VIRGL_GBM_MAX_PLANES GBM_MAX_PLANES
-#else
-#define VIRGL_GBM_MAX_PLANES 4
-#endif
-
 /* GBM_FORMAT_ABGR16161616F was added since mesa 20.0 */
 #ifndef GBM_FORMAT_ABGR16161616F
 #define GBM_FORMAT_ABGR16161616F __gbm_fourcc_code('A', 'B', '4', 'H') /* [63:0] A:B:G:R 16:16:16:16 little endian */

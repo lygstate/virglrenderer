@@ -42,6 +42,7 @@
 #include "vrend_winsys_gbm.h"
 #include "virgl_hw.h"
 #include "vrend_debug.h"
+#include "vrend_renderer.h"
 
 struct planar_layout {
     size_t num_planes;
@@ -49,6 +50,10 @@ struct planar_layout {
     int vertical_subsampling[VIRGL_GBM_MAX_PLANES];
     int bytes_per_pixel[VIRGL_GBM_MAX_PLANES];
 };
+
+#if defined(GBM_MAX_PLANES) && VIRGL_GBM_MAX_PLANES != GBM_MAX_PLANES
+#error VIRGL_GBM_MAX_PLANES and GBM_MAX_PLANES should be the same value if GBM_MAX_PLANES defined
+#endif
 
 struct format_conversion {
     uint32_t gbm_format;
