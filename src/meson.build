@@ -94,7 +94,6 @@ venus_sources = [
 virgl_depends = [
    gallium_dep,
    epoxy_dep,
-   libdrm_dep,
    thread_dep,
    m_dep,
 ]
@@ -108,6 +107,11 @@ if with_tracing == 'percetto'
 endif
 
 virgl_sources += vrend_sources
+
+if host_machine.system() != 'windows'
+   libdrm_dep = dependency('libdrm', version : '>=2.4.50')
+   virgl_depends += [libdrm_dep]
+endif
 
 if have_egl
    virgl_sources += vrend_winsys_egl_sources
