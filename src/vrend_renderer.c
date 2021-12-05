@@ -4100,9 +4100,9 @@ static void vrend_draw_bind_vertex_legacy(struct vrend_context *ctx,
       } else {
          enable_bitmask |= (1 << loc);
          if (util_format_is_pure_integer(ve->base.src_format)) {
-            glVertexAttribIPointer(loc, ve->nr_chan, ve->type, vbo->base.stride, (void *)(unsigned long)(ve->base.src_offset + vbo->base.buffer_offset));
+            glVertexAttribIPointer(loc, ve->nr_chan, ve->type, vbo->base.stride, (void *)(uintptr_t)(ve->base.src_offset + vbo->base.buffer_offset));
          } else {
-            glVertexAttribPointer(loc, ve->nr_chan, ve->type, ve->norm, vbo->base.stride, (void *)(unsigned long)(ve->base.src_offset + vbo->base.buffer_offset));
+            glVertexAttribPointer(loc, ve->nr_chan, ve->type, ve->norm, vbo->base.stride, (void *)(uintptr_t)(ve->base.src_offset + vbo->base.buffer_offset));
          }
          glVertexAttribDivisorARB(loc, ve->base.instance_divisor);
       }
@@ -4797,12 +4797,12 @@ int vrend_draw_vbo(struct vrend_context *ctx,
 
       if (indirect_handle) {
          if (indirect_params_res)
-            glMultiDrawArraysIndirectCountARB(mode, (GLvoid const *)(unsigned long)info->indirect.offset,
+            glMultiDrawArraysIndirectCountARB(mode, (GLvoid const *)(uintptr_t)info->indirect.offset,
                                               info->indirect.indirect_draw_count_offset, info->indirect.draw_count, info->indirect.stride);
          else if (info->indirect.draw_count > 1)
-            glMultiDrawArraysIndirect(mode, (GLvoid const *)(unsigned long)info->indirect.offset, info->indirect.draw_count, info->indirect.stride);
+            glMultiDrawArraysIndirect(mode, (GLvoid const *)(uintptr_t)info->indirect.offset, info->indirect.draw_count, info->indirect.stride);
          else
-            glDrawArraysIndirect(mode, (GLvoid const *)(unsigned long)info->indirect.offset);
+            glDrawArraysIndirect(mode, (GLvoid const *)(uintptr_t)info->indirect.offset);
       } else if (info->instance_count <= 1)
          glDrawArrays(mode, start, count);
       else if (info->start_instance)
@@ -4827,25 +4827,25 @@ int vrend_draw_vbo(struct vrend_context *ctx,
 
       if (indirect_handle) {
          if (indirect_params_res)
-            glMultiDrawElementsIndirectCountARB(mode, elsz, (GLvoid const *)(unsigned long)info->indirect.offset,
+            glMultiDrawElementsIndirectCountARB(mode, elsz, (GLvoid const *)(uintptr_t)info->indirect.offset,
                                                 info->indirect.indirect_draw_count_offset, info->indirect.draw_count, info->indirect.stride);
          else if (info->indirect.draw_count > 1)
-            glMultiDrawElementsIndirect(mode, elsz, (GLvoid const *)(unsigned long)info->indirect.offset, info->indirect.draw_count, info->indirect.stride);
+            glMultiDrawElementsIndirect(mode, elsz, (GLvoid const *)(uintptr_t)info->indirect.offset, info->indirect.draw_count, info->indirect.stride);
          else
-            glDrawElementsIndirect(mode, elsz, (GLvoid const *)(unsigned long)info->indirect.offset);
+            glDrawElementsIndirect(mode, elsz, (GLvoid const *)(uintptr_t)info->indirect.offset);
       } else if (info->index_bias) {
          if (info->instance_count > 1)
-            glDrawElementsInstancedBaseVertex(mode, info->count, elsz, (void *)(unsigned long)sub_ctx->ib.offset, info->instance_count, info->index_bias);
+            glDrawElementsInstancedBaseVertex(mode, info->count, elsz, (void *)(uintptr_t)sub_ctx->ib.offset, info->instance_count, info->index_bias);
          else if (info->min_index != 0 || info->max_index != (unsigned)-1)
-            glDrawRangeElementsBaseVertex(mode, info->min_index, info->max_index, info->count, elsz, (void *)(unsigned long)sub_ctx->ib.offset, info->index_bias);
+            glDrawRangeElementsBaseVertex(mode, info->min_index, info->max_index, info->count, elsz, (void *)(uintptr_t)sub_ctx->ib.offset, info->index_bias);
          else
-            glDrawElementsBaseVertex(mode, info->count, elsz, (void *)(unsigned long)sub_ctx->ib.offset, info->index_bias);
+            glDrawElementsBaseVertex(mode, info->count, elsz, (void *)(uintptr_t)sub_ctx->ib.offset, info->index_bias);
       } else if (info->instance_count > 1) {
-         glDrawElementsInstancedARB(mode, info->count, elsz, (void *)(unsigned long)sub_ctx->ib.offset, info->instance_count);
+         glDrawElementsInstancedARB(mode, info->count, elsz, (void *)(uintptr_t)sub_ctx->ib.offset, info->instance_count);
       } else if (info->min_index != 0 || info->max_index != (unsigned)-1)
-         glDrawRangeElements(mode, info->min_index, info->max_index, info->count, elsz, (void *)(unsigned long)sub_ctx->ib.offset);
+         glDrawRangeElements(mode, info->min_index, info->max_index, info->count, elsz, (void *)(uintptr_t)sub_ctx->ib.offset);
       else
-         glDrawElements(mode, info->count, elsz, (void *)(unsigned long)sub_ctx->ib.offset);
+         glDrawElements(mode, info->count, elsz, (void *)(uintptr_t)sub_ctx->ib.offset);
    }
 
    if (info->primitive_restart) {
