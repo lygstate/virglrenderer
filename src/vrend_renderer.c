@@ -6952,6 +6952,7 @@ static int vrend_resource_alloc_texture(struct vrend_resource *gr,
 
    const bool format_can_texture_storage = has_feature(feat_texture_storage) &&
         (tex_conv_table[format].flags & VIRGL_TEXTURE_CAN_TEXTURE_STORAGE);
+   const bool format_has_storage_multisample = has_feature(feat_storage_multisample);
 
    if (format_can_texture_storage)
       gr->storage_bits |= VREND_STORAGE_GL_IMMUTABLE;
@@ -7015,7 +7016,7 @@ static int vrend_resource_alloc_texture(struct vrend_resource *gr,
       }
 
       if (pr->nr_samples > 0) {
-         if (format_can_texture_storage) {
+         if (format_can_texture_storage && format_has_storage_multisample) {
             if (gr->target == GL_TEXTURE_2D_MULTISAMPLE) {
                glTexStorage2DMultisample(gr->target, pr->nr_samples,
                                          internalformat, pr->width0, pr->height0,
