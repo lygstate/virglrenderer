@@ -57,7 +57,7 @@ typedef thrd_t pipe_thread;
 static inline pipe_thread pipe_thread_create( PIPE_THREAD_ROUTINE((*routine), ), void *param )
 {
    pipe_thread thread;
-#ifdef HAVE_PTHREAD
+#if !defined(__MINGW32__) && defined(HAVE_PTHREAD)
    sigset_t saved_set, new_set;
    int ret;
 
