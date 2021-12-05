@@ -67,10 +67,6 @@ os_free_aligned(void *ptr);
 }
 #endif
 
-#elif defined(PIPE_OS_WINDOWS) && defined(DEBUG) && !defined(DEBUG_MEMORY_IMPLEMENTATION)
-
-#  include "os_memory_debug.h"
-
 #else
 
 #  include "os_memory_stdc.h"

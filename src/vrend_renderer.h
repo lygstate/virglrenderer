@@ -47,6 +47,7 @@ struct virgl_gl_ctx_param {
 struct virgl_context;
 struct virgl_resource;
 struct vrend_context;
+struct virgl_renderer_export_query;
 
 #define VIRGL_GBM_MAX_PLANES 4
 
