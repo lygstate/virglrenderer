@@ -7879,7 +7879,7 @@ static void do_readpixels(struct vrend_resource *res,
 
    if (has_feature(feat_arb_robustness))
       glReadnPixelsARB(x, y, width, height, format, type, bufSize, data);
-   else if (has_feature(feat_gles_khr_robustness))
+   else if (vrend_state.use_gles && has_feature(feat_gles_khr_robustness))
       glReadnPixelsKHR(x, y, width, height, format, type, bufSize, data);
    else
       glReadPixels(x, y, width, height, format, type, data);
